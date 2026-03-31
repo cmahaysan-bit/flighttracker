@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Family Flight Tracker</title>
+    <meta http-equiv="refresh" content="300"> <!-- refresh every 5 mins -->
+    <style>
+        body { font-family: "Segoe UI", Arial, sans-serif; margin: 40px; background-color: #f9fafc; color: #333; }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 10px; }
+        h2 { margin-top: 50px; color: #34495e; border-bottom: 2px solid #ddd; padding-bottom: 5px; }
+        h3 { margin-top: 25px; color: #555; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.1); background: #fff; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f0f3f7; }
+        .status.scheduled { color: #007bff; font-weight: bold; }
+        .status.delayed { color: #dc3545; font-weight: bold; }
+        .status.boarding { color: #fd7e14; font-weight: bold; }
+        .status.departed { color: #6f42c1; font-weight: bold; }
+        .status.landed { color: #28a745; font-weight: bold; }
+        .status.cancelled { color: #6c757d; font-weight: bold; }
+        .legend { margin: 20px auto; width: 80%; }
+        .legend span { display: inline-block; margin-right: 20px; font-size: 14px; }
+        .legend .box { width: 12px; height: 12px; display: inline-block; margin-right: 5px; vertical-align: middle; }
+        .box.scheduled { background: #007bff; }
+        .box.delayed { background: #dc3545; }
+        .box.boarding { background: #fd7e14; }
+        .box.departed { background: #6f42c1; }
+        .box.landed { background: #28a745; }
+        .box.cancelled { background: #6c757d; }
+    </style>
+</head>
+<body>
+    <h1>Family Flight Tracker ✈️</h1>
+
+    <!-- Status Legend -->
+    <div class="legend">
+        <span><span class="box scheduled"></span> Scheduled</span>
+        <span><span class="box delayed"></span> Delayed</span>
+        <span><span class="box boarding"></span> Boarding</span>
+        <span><span class="box departed"></span> Departed</span>
+        <span><span class="box landed"></span> Landed</span>
+        <span><span class="box cancelled"></span> Cancelled</span>
+    </div>
+
+    <!-- Mahaysan -->
+    <h2>Mahaysan</h2>
+    <table>
+        <tr><th>Flight</th><th>Airline</th><th>Departure</th><th>Arrival</th><th>Status</th></tr>
+        <tr>
+            <td>TR 522</td>
+            <td>Scoot (Airbus A321neo)</td>
+            <td>Singapore Changi – T1<br>01 Apr, 13:25</td>
+            <td>Ho Chi Minh City – T2<br>01 Apr, 14:40</td>
+            <td class="status scheduled" id="TR522-status">Scheduled</td>
+        </tr>
+        <tr>
+            <td>TR 523</td>
+            <td>Scoot (Airbus A321neo)</td>
+            <td>Ho Chi Minh City – T2<br>04 Apr, 18:15</td>
+            <td>Singapore Changi – T1<br>04 Apr, 21:20</td>
+            <td class="status scheduled" id="TR523-status">Scheduled</td>
+        </tr>
+    </table>
+
+    <!-- Vani -->
+    <h2>Vani</h2>
+    <table>
+        <tr><th>Flight</th><th>Airline</th><th>Departure</th><th>Arrival</th><th>Status</th></tr>
+        <tr>
+            <td>SQ 22</td>
+            <td>Singapore Airlines (A350-900)</td>
+            <td>Singapore Changi – T3<br>04 Apr, 23:35</td>
+            <td>Newark Liberty – T B<br>05 Apr, ~06:00</td>
+            <td class="status scheduled" id="SQ22-status">Scheduled</td>
+        </tr>
+        <tr>
+            <td>SQ 21</td>
+            <td>Singapore Airlines (A350-900)</td>
+            <td>Newark Liberty – T B<br>11 Apr, 09:35</td>
+            <td>Singapore Changi – T3<br>12 Apr, 16:45</td>
+            <td class="status scheduled" id="SQ21-status">Scheduled</td>
+        </tr>
+    </table>
+
+    <!-- Mom -->
+    <h2>Mom</h2>
+    <h3>Singapore ↔ India</h3>
+    <table>
+        <tr><th>Flight</th><th>Airline</th><th>Departure</th><th>Arrival</th><th>Status</th></tr>
+        <tr>
+            <td>AI 2381</td>
+            <td>Air India</td>
+            <td>Singapore Changi – T2<br>02 Apr, 08:55</td>
+            <td>New Delhi – T3<br>02 Apr, ~12:00</td>
+            <td class="status scheduled" id="AI2381-status">Scheduled</td>
+        </tr>
+        <tr>
+            <td>6E 1005</td>
+            <td>IndiGo (A320)</td>
+            <td>Bengaluru – T2<br>12 Apr, 21:20</td>
+            <td>Singapore Changi – T2<br>13 Apr, 04:40 (+1)</td>
+            <td class="status scheduled" id="6E1005-status">Scheduled</td>
+        </tr>
+    </table>
+
+    <h3>Flights within India</h3>
+    <table>
+        <tr><th>Flight</th><th>Airline</th><th>Departure</th><th>Arrival</th><th>Status</th></tr>
+        <tr>
+            <td>6E 5253</td>
+            <td>IndiGo (A320)</td>
+            <td>Kolkata<br>06 Apr, 10:45</td>
+            <td>Gaya<br>06 Apr, 11:55</td>
+            <td class="status scheduled" id="6E5253-status">Scheduled</td>
+        </tr>
+        <tr>
+            <td>6E 926</td>
+            <td>IndiGo (A320)</td>
+            <td>Ayodhya<br>11 Apr, 09:40</td>
+            <td>Bengaluru – T1<br>11 Apr, 12:15</td>
+            <td class="status scheduled" id="6E926-status">Scheduled</td>
+        </tr>
+    </table>
+</body>
+</html>
