@@ -83,7 +83,7 @@
         </tr>
     </table>
 
-    <h3>Flights within India</h3>
+        <h3>Flights within India</h3>
     <table>
         <tr><th>Flight</th><th>Airline</th><th>Departure</th><th>Arrival</th><th>Status</th></tr>
         <tr>
@@ -102,9 +102,22 @@
         </tr>
     </table>
 
+    <!-- Legend -->
+    <div class="legend">
+        <h2>Status Legend</h2>
+        <ul>
+            <li><span class="status scheduled">Scheduled</span> – Flight is planned but not yet departed.</li>
+            <li><span class="status boarding">Boarding</span> – Passengers are boarding the aircraft.</li>
+            <li><span class="status departed">Departed</span> – Flight has left the gate/runway.</li>
+            <li><span class="status active">Active</span> – Flight is currently in the air.</li>
+            <li><span class="status landed">Landed</span> – Flight has arrived at its destination.</li>
+            <li><span class="status delayed">Delayed</span> – Flight departure or arrival is delayed.</li>
+            <li><span class="status cancelled">Cancelled</span> – Flight has been cancelled.</li>
+        </ul>
+    </div>
+
     <!-- JavaScript -->
     <script>
-    // Track active flights
     let activeFlights = [
         { code: "TR552", id: "TR552-status" },
         { code: "TR523", id: "TR523-status" },
@@ -128,7 +141,7 @@
                 el.innerText = status.charAt(0).toUpperCase() + status.slice(1);
                 el.className = "status " + status.toLowerCase();
 
-                // If flight is landed or cancelled, remove from activeFlights
+                // Stop refreshing once landed or cancelled
                 if (status === "landed" || status === "cancelled") {
                     activeFlights = activeFlights.filter(f => f.code !== flightCode);
                 }
