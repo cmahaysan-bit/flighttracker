@@ -104,24 +104,8 @@
 
     <!-- JavaScript -->
     <script>
-    async function updateFlightStatus(flightCode, elementId) {
-        try {
-            const API_URL = `https://api.aviationstack.com/v1/flights?access_key=3f45c3f1b466543fa2f518fe8ffc6ea1&flight_iata=${flightCode}`;
-            const response = await fetch(API_URL);
-            const data = await response.json();
-
-            if (data && data.data && data.data.length > 0) {
-                const status = data.data[0].flight_status; // "scheduled", "active", "landed", etc.
-                const el = document.getElementById(elementId);
-                el.innerText = status.charAt(0).toUpperCase() + status.slice(1);
-                el.className = "status " + status.toLowerCase();
-            }
-        } catch (err) {
-            console.error("Error fetching flight status:", err);
-        }
-    }
-
-    const flights = [
+    // Track active flights
+    let activeFlights = [
         { code: "TR552", id: "TR552-status" },
         { code: "TR523", id: "TR523-status" },
         { code: "SQ22", id: "SQ22-status" },
@@ -132,9 +116,37 @@
         { code: "6E926", id: "6E926-status" }
     ];
 
-    // Update all flights immediately and every 30 minutes
-    flights.forEach(f => updateFlightStatus(f.code, f.id));
-    setInterval(() => flights.forEach(f => updateFlightStatus(f.code, f.id)), 1800000);
+    async function updateFlightStatus(flightCode, elementId) {
+        try {
+            const API_URL = `https://api.aviationstack.com/v1/flights?access_key=3f45c3f1b466543fa2f518fe8ffc6ea1&flight_iata=${flightCode}`;
+            const response = await fetch(API_URL);
+            const data = await response.json();
+
+            if (data && data.data && data.data.length > 0) {
+                const status = data.data[0].flight_status; // "scheduled", "active", "landed", "cancelled"
+                const el = document.getElementById(elementId);
+                el.innerText = status.charAt(0).toUpperCase() + status.slice(1);
+                el.className = "status " + status.toLowerCase();
+
+                // If flight is landed or cancelled, remove from activeFlights
+                if (status === "landed" || status === "cancelled") {
+                    activeFlights = activeFlights.filter(f => f.code !== flightCode);
+                }
+            }
+        } catch (err) {
+            console.error("Error fetching flight status:", err);
+        }
+    }
+
+    function refreshAllFlights() {
+        activeFlights.forEach(f => updateFlightStatus(f.code, f.id));
+    }
+
+    // Initial run
+    refreshAllFlights();
+
+    // Refresh every 30 minutes
+    setInterval(refreshAllFlights, 1800000);
     </script>
 </body>
 </html>
