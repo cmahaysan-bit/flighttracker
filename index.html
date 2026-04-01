@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Family Flight Tracker</title>
-    <meta http-equiv="refresh" content="300"> <!-- refresh every 5 mins -->
+    <meta http-equiv="refresh" content="1800"> <!-- refresh every 30 mins -->
     <style>
         body { font-family: "Segoe UI", Arial, sans-serif; margin: 40px; background-color: #f9fafc; color: #333; }
         h1 { color: #2c3e50; text-align: center; margin-bottom: 10px; }
@@ -17,29 +17,10 @@
         .status.departed { color: #6f42c1; font-weight: bold; }
         .status.landed { color: #28a745; font-weight: bold; }
         .status.cancelled { color: #6c757d; font-weight: bold; }
-        .legend { margin: 20px auto; width: 80%; }
-        .legend span { display: inline-block; margin-right: 20px; font-size: 14px; }
-        .legend .box { width: 12px; height: 12px; display: inline-block; margin-right: 5px; vertical-align: middle; }
-        .box.scheduled { background: #007bff; }
-        .box.delayed { background: #dc3545; }
-        .box.boarding { background: #fd7e14; }
-        .box.departed { background: #6f42c1; }
-        .box.landed { background: #28a745; }
-        .box.cancelled { background: #6c757d; }
     </style>
 </head>
 <body>
     <h1>Family Flight Tracker ✈️</h1>
-
-    <!-- Status Legend -->
-    <div class="legend">
-        <span><span class="box scheduled"></span> Scheduled</span>
-        <span><span class="box delayed"></span> Delayed</span>
-        <span><span class="box boarding"></span> Boarding</span>
-        <span><span class="box departed"></span> Departed</span>
-        <span><span class="box landed"></span> Landed</span>
-        <span><span class="box cancelled"></span> Cancelled</span>
-    </div>
 
     <!-- Mahaysan -->
     <h2>Mahaysan</h2>
@@ -120,5 +101,40 @@
             <td class="status scheduled" id="6E926-status">Scheduled</td>
         </tr>
     </table>
+
+    <!-- JavaScript -->
+    <script>
+    async function updateFlightStatus(flightCode, elementId) {
+        try {
+            const API_URL = `https://api.aviationstack.com/v1/flights?access_key=3f45c3f1b466543fa2f518fe8ffc6ea1&flight_iata=${flightCode}`;
+            const response = await fetch(API_URL);
+            const data = await response.json();
+
+            if (data && data.data && data.data.length > 0) {
+                const status = data.data[0].flight_status; // "scheduled", "active", "landed", etc.
+                const el = document.getElementById(elementId);
+                el.innerText = status.charAt(0).toUpperCase() + status.slice(1);
+                el.className = "status " + status.toLowerCase();
+            }
+        } catch (err) {
+            console.error("Error fetching flight status:", err);
+        }
+    }
+
+    const flights = [
+        { code: "TR552", id: "TR552-status" },
+        { code: "TR523", id: "TR523-status" },
+        { code: "SQ22", id: "SQ22-status" },
+        { code: "SQ21", id: "SQ21-status" },
+        { code: "AI2381", id: "AI2381-status" },
+        { code: "6E1005", id: "6E1005-status" },
+        { code: "6E5253", id: "6E5253-status" },
+        { code: "6E926", id: "6E926-status" }
+    ];
+
+    // Update all flights immediately and every 30 minutes
+    flights.forEach(f => updateFlightStatus(f.code, f.id));
+    setInterval(() => flights.forEach(f => updateFlightStatus(f.code, f.id)), 1800000);
+    </script>
 </body>
 </html>
