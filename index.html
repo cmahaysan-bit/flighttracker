@@ -83,7 +83,7 @@
         </tr>
     </table>
 
-        <h3>Flights within India</h3>
+            <h3>Flights within India</h3>
     <table>
         <tr><th>Flight</th><th>Airline</th><th>Departure</th><th>Arrival</th><th>Status</th></tr>
         <tr>
@@ -119,24 +119,24 @@
     <!-- JavaScript -->
     <script>
     let activeFlights = [
-        { code: "TR552", id: "TR552-status" },
-        { code: "TR523", id: "TR523-status" },
-        { code: "SQ22", id: "SQ22-status" },
-        { code: "SQ21", id: "SQ21-status" },
-        { code: "AI2381", id: "AI2381-status" },
-        { code: "6E1005", id: "6E1005-status" },
-        { code: "6E5253", id: "6E5253-status" },
-        { code: "6E926", id: "6E926-status" }
+        { code: "TR552", id: "TR552-status", date: "2026-04-01" },
+        { code: "TR523", id: "TR523-status", date: "2026-04-04" },
+        { code: "SQ22", id: "SQ22-status", date: "2026-04-04" },
+        { code: "SQ21", id: "SQ21-status", date: "2026-04-11" },
+        { code: "AI2381", id: "AI2381-status", date: "2026-04-02" },
+        { code: "6E1005", id: "6E1005-status", date: "2026-04-12" },
+        { code: "6E5253", id: "6E5253-status", date: "2026-04-06" },
+        { code: "6E926", id: "6E926-status", date: "2026-04-11" }
     ];
 
-    async function updateFlightStatus(flightCode, elementId) {
+    async function updateFlightStatus(flightCode, elementId, flightDate) {
         try {
-            const API_URL = `https://api.aviationstack.com/v1/flights?access_key=3f45c3f1b466543fa2f518fe8ffc6ea1&flight_iata=${flightCode}`;
+            const API_URL = `https://api.aviationstack.com/v1/flights?access_key=YOUR_KEY&flight_iata=${flightCode}&flight_date=${flightDate}`;
             const response = await fetch(API_URL);
             const data = await response.json();
 
             if (data && data.data && data.data.length > 0) {
-                const status = data.data[0].flight_status; // "scheduled", "active", "landed", "cancelled"
+                const status = data.data[0].flight_status; 
                 const el = document.getElementById(elementId);
                 el.innerText = status.charAt(0).toUpperCase() + status.slice(1);
                 el.className = "status " + status.toLowerCase();
@@ -152,7 +152,7 @@
     }
 
     function refreshAllFlights() {
-        activeFlights.forEach(f => updateFlightStatus(f.code, f.id));
+        activeFlights.forEach(f => updateFlightStatus(f.code, f.id, f.date));
     }
 
     // Initial run
